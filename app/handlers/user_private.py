@@ -17,8 +17,8 @@ load_dotenv()
 
 class MyCity(StatesGroup):
     city = State()
-
-redis_client = redis.from_url("redis://localhost:6379")
+REDIS_URL = os.getenv("REDIS_URL")
+redis_client = redis.from_url(REDIS_URL)
 WEATHER_KEY = os.getenv("WEATHER_KEY")
 
 user_private_router = Router()

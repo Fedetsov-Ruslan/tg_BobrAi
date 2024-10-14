@@ -1,0 +1,41 @@
+services:
+  bot:
+    image: tg_fastapi_weather_bot
+    container_name: 'tg_fastapi_weather_bot'
+
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${DB_USER}:${DB_PASS}@db:5432/${DB_NAME}
+    depends_on:
+      - db
+      - redis
+
+    ports:
+      - "8000:8000"
+    networks:
+      - weather
+
+  db:
+    image: postgres
+    container_name: 'tg_fastapi_weather_db'
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+
+    networks:
+      - weather
+  
+  redis:
+    image: redis
+    container_name: 'redis-rate'
+    ports:
+      - "6379:6379"
+    networks:
+      - weather
+  
+    
+networks:
+  weather:
+    driver: bridge
